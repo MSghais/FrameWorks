@@ -10,19 +10,34 @@ import {
   useFramesReducer,
 } from "frames.js/next/server";
 import Link from "next/link";
-import { DEFAULT_DEBUGGER_HUB_URL, createDebugUrl } from "./debug";
-import { currentURL } from "./utils";
+import { DEFAULT_DEBUGGER_HUB_URL, createDebugUrl } from "../debug";
+import { currentURL } from "../utils";
+import { Button } from "frames.js/next";
 
-type State = {
+export type LFGState = {
   active: string;
   total_button_presses: number;
+  step: number;
+  selectedQuest: number;
+  page?: string | "initial" | "result";
 };
 
-const initialState = { active: "1", total_button_presses: 0 };
+export const initialState = {
+  active: "1",
+  total_button_presses: 0,
+  step: 0,
+  selectedQuest: 0,
+  page: "initial",
+};
 
-const reducer: FrameReducer<State> = (state, action) => {
+export const reducer: FrameReducer<LFGState> = (state, action) => {
+  //   const buttonIndex = action.postBody?.untrustedData.buttonIndex;
+
   return {
     total_button_presses: state.total_button_presses + 1,
+    step: 0,
+    selectedQuest: 0,
+    page: "initial",
     active: action.postBody?.untrustedData.buttonIndex
       ? String(action.postBody?.untrustedData.buttonIndex)
       : "1",
@@ -31,8 +46,9 @@ const reducer: FrameReducer<State> = (state, action) => {
 
 // This is a react server component only
 export default async function Home({ searchParams }: NextServerPageProps) {
-  const url = currentURL("/");
-  const previousFrame = getPreviousFrame<State>(searchParams);
+  const url = currentURL("/lfg");
+  const previousFrame = getPreviousFrame<LFGState>(searchParams);
+  console.log("previousFrame", previousFrame);
 
   const frameMessage = await getFrameMessage(previousFrame.postBody, {
     hubHttpUrl: DEFAULT_DEBUGGER_HUB_URL,
@@ -43,7 +59,7 @@ export default async function Home({ searchParams }: NextServerPageProps) {
   }
   console.log("frameMessage is:", frameMessage);
 
-  const [state, dispatch] = useFramesReducer<State>(
+  const [state, dispatch] = useFramesReducer<LFGState>(
     reducer,
     initialState,
     previousFrame
@@ -67,8 +83,10 @@ export default async function Home({ searchParams }: NextServerPageProps) {
         other examples
       </Link>
       <FrameContainer
-        postUrl="/frames"
-        pathname="/"
+        // postUrl="/lfg/frames"
+        postUrl="/lfg/frames/basic"
+
+        pathname="/lfg"
         state={state}
         previousFrame={previousFrame}
       >
@@ -110,9 +128,21 @@ export default async function Home({ searchParams }: NextServerPageProps) {
         <FrameButton>
           {state?.active === "2" ? "Active" : "Inactive"}
         </FrameButton>
-        <FrameButton action="link" target={`https://www.google.com`}>
+
+        <FrameButton action="post" target="/lfg/frames">
+          LFG
+        </FrameButton>
+
+        <FrameButton action="link" target={`http://localhost:3010/?url=http%3A%2F%2Flocalhost%3A3000%2Flfg`}>
           External
         </FrameButton>
+
+        {/* <FrameButton 
+        action="post"
+        post_url="/test"></FrameButton> */}
+        {/* <FrameButton action="link" target={`https://www.google.com`}>
+          External
+        </FrameButton> */}
       </FrameContainer>
     </div>
   );
