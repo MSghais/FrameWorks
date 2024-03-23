@@ -10,8 +10,8 @@ import {
   useFramesReducer,
 } from "frames.js/next/server";
 import Link from "next/link";
-import { DEFAULT_DEBUGGER_HUB_URL, createDebugUrl } from "./debug";
-import { currentURL } from "./utils";
+import { DEFAULT_DEBUGGER_HUB_URL, createDebugUrl } from "../debug";
+import { currentURL } from "../utils";
 import { Button } from "frames.js/next";
 import { Quest } from "prisma"
 
@@ -91,31 +91,29 @@ export default async function Home({ searchParams }: NextServerPageProps) {
       </Link>
       <FrameContainer
         // postUrl="/lfg/frames"
-        postUrl="/"
-        pathname="/"
+        postUrl="/quest/frames"
+        pathname="/quest"
         state={state}
         previousFrame={previousFrame}
       >
         {/* <FrameImage src="https://framesjs.org/og.png" /> */}
         <FrameImage aspectRatio="1.91:1">
-          <div tw="w-full h-full bg-slate-700 text-white justify-center items-center flex flex-col text-left">
+          <div tw="w-full h-full bg-slate-700 text-white justify-center items-center flex flex-col"
+            style={{ display: "flex", flexDirection: "column" }}
+
+          >
             <div tw="flex flex-row">
-              <p
-              >
-                WUW Frames:
+              <div tw="flex flex-row">
+                WUW Frames
+              </div>
+              <p tw="flex flex-row">
+                {frameMessage?.inputText ? frameMessage.inputText : "Check all Farcaster quest"}
+
+              </p>
+              <p tw="flex flex-row">
+                Keep building after
               </p>
             </div>
-            <p
-            //  tw="flex flex-row"
-            >
-              Quest and Ads for Farcaster
-
-            </p>
-            <p
-            >
-              Keep building after: @WUW_WhateverFi
-            </p>
-           
             {frameMessage && (
               <div tw="flex flex-col">
                 <div tw="flex">
@@ -142,15 +140,31 @@ export default async function Home({ searchParams }: NextServerPageProps) {
           </div>
         </FrameImage>
         <FrameInput text="put some text here" />
-        <FrameButton action="post" target="/quest">
-          Quest
+        <FrameButton>
+          {state?.active === "1" ? "Check quest" : "Inactive"}
         </FrameButton>
-        <FrameButton action="post" target="/ads">
-          Ads
+        {/* <FrameButton>
+          {state?.active === "2" ? "Active" : "Inactive"}
         </FrameButton>
-        <FrameButton action="link" target={`https://wuwfi.xyz`}>
-          Go WUW
+        <FrameButton
+          action="post"
+          target="/quest/frames"
+        >
+          {state?.active === "2" ? "Active" : "Inactive"}
+        </FrameButton> */}
+        {/* <FrameButton action="post" target="/lfg/frames">
+          LFG
+        </FrameButton> */}
+        <FrameButton action="link" target={`http://localhost:3010/?url=http%3A%2F%2Flocalhost%3A3000%2Flfg`}>
+          External
         </FrameButton>
+
+        {/* <FrameButton 
+        action="post"
+        post_url="/test"></FrameButton> */}
+        {/* <FrameButton action="link" target={`https://www.google.com`}>
+          External
+        </FrameButton> */}
       </FrameContainer>
     </div>
   );

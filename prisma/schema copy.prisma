@@ -31,8 +31,7 @@ enum QuestRequirements {
     FOLLOW
     LIKE
     REPLY
-    CAST
-    RECAST
+    QUOTE
 }
 
 model Quest {
@@ -42,6 +41,6 @@ model Quest {
   amountUpvote Int?
   requirements QuestRequirements?
   content   String
-  author    User?     @relation(fields: [authorId], references: [id])
-  authorId  String? @db.ObjectId
+  author    User     @relation(fields: [authorId], references: [id])
+  authorId  String @db.ObjectId
 }
