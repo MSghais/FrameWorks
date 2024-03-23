@@ -1,0 +1,46 @@
+// prisma/schema.prisma
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DB_MONGO_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id                String   @id @default(auto()) @map("_id") @db.ObjectId // Use String as the ID type
+  name     String
+  fid String? @unique
+  address    String   @unique
+  posts    Post[]
+  quests    Quest[]
+}
+
+model Post {
+  id                String   @id @default(auto()) @map("_id") @db.ObjectId // Use String as the ID type
+  title     String?
+  fidId String?
+  content   String
+  author    User     @relation(fields: [authorId], references: [id])
+  authorId  String @db.ObjectId
+}
+
+enum QuestRequirements {
+    FOLLOW
+    LIKE
+    REPLY
+    QUOTE
+}
+
+model Quest {
+  id                String   @id @default(auto()) @map("_id") @db.ObjectId // Use String as the ID type
+  title     String?
+  fidId String?
+  amountUpvote Int?
+  requirements QuestRequirements?
+  content   String
+  author    User     @relation(fields: [authorId], references: [id])
+  authorId  String @db.ObjectId
+}
