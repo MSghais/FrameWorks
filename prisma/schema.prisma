@@ -11,9 +11,9 @@ generator client {
 
 model User {
   id                String   @id @default(auto()) @map("_id") @db.ObjectId // Use String as the ID type
-  name     String
+  name     String?
   fid String @unique
-  address    String   @unique
+  address    String? 
   posts    Post[]
   quests    Quest[]
 }
@@ -38,7 +38,8 @@ enum QuestRequirements {
 model Quest {
   id                String   @id @default(auto()) @map("_id") @db.ObjectId // Use String as the ID type
   title     String?
-  fidId String?
+  fid String?
+  src String?
   amountUpvote Int?
   requirements QuestRequirements?
   content   String
@@ -94,5 +95,7 @@ model Ads {
   image String?
   payments TransactionAds[]
 }
+
+
 
 

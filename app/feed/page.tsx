@@ -69,6 +69,8 @@ export default async function Home({ searchParams }: NextServerPageProps) {
     initialState,
     previousFrame
   );
+  let origin = previousFrame?.headers?.url;
+
 
   // Here: do a server side side effect either sync or async (using await), such as minting an NFT if you want.
   // example: load the users credentials & check they have an NFT
@@ -129,6 +131,17 @@ export default async function Home({ searchParams }: NextServerPageProps) {
         <FrameInput text="put some text here" />
         <FrameButton>
           View whatever
+        </FrameButton>
+        <FrameButton action="post"
+        target="/feed/frames/recommender"
+        >
+          Recommendations
+        </FrameButton>
+        <FrameButton
+          action="post"
+          target={`${origin}/`}
+        >
+          Home
         </FrameButton>
         <FrameButton action="link" target={`https://wuwfi.xyz`}>
           WUW Fi External

@@ -76,15 +76,17 @@ const handleRequest = frames(async (ctx) => {
   const adsDb = await client?.ads.findMany();
 
   const ads: Partial<Ads>[] = [...adsInit, ...adsDb];
-
   let searchParams = ctx?.searchParams;
   let href = ctx?.url?.href;
-  let origin = ctx?.url?.origin;
+  // let origin = ctx?.url?.origin;
+
   let message = ctx?.message;
   const active = searchParams?.active;
   console.log("active", active);
   const previousFrame = getPreviousFrame<AdsState>(searchParams);
+
   console.log("previousFrame", previousFrame);
+  let origin = previousFrame?.headers?.url;
   const options = {
     method: "GET",
     headers: { Authorization: `Bearer ${process.env.PINATA_TOKEN}` },
