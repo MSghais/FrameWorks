@@ -141,7 +141,7 @@ export default async function Home({ searchParams }: NextServerPageProps) {
             )}
           </div>
         </FrameImage>
-        <FrameInput text="put some text here" />
+        {/* <FrameInput text="put some text here" /> */}
         <FrameButton action="post" target="/quest">
           Quest
         </FrameButton>

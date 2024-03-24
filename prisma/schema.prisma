@@ -83,6 +83,7 @@ model Ads {
   castId String?
   fid String?
   channelId String?
+  channelName String?
   ownerFid String?
   questIndex String?
   createdAt Int?
