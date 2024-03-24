@@ -74,6 +74,9 @@ const handleRequest = frames(async (ctx) => {
   let fid = ctx?.message?.requesterFid ?? 50;
   console.log("a fid", fid);
   const quest = ads[page];
+  // let origin = ctx?.url?.href
+  let origin = ctx?.url?.origin
+
   // TODO get data based on ads
   let data: undefined | any;
 

@@ -12,13 +12,14 @@ import {
   useFramesReducer,
 } from "frames.js/next/server";
 import { DEFAULT_DEBUGGER_HUB_URL } from "../../debug";
-import {
-  addUser,
-  getUserByFidDb,
-  userValidQuest,
-} from "../../services";
-import { Quest } from "@prisma/client";
+import { addUser, getUserByFidDb, userValidQuest } from "../../services";
+import { Quest, TypeAds } from "@prisma/client";
 import { LFGState } from "../../types";
+import {
+  getCastByHash,
+  getChannelByName,
+  getUserByFid,
+} from "../../services/pinata";
 enum RequirementQuest {
   FOLLOW = "FOLLOW",
   FOLLOWER = "FOLLOWER",
@@ -36,18 +37,16 @@ enum RequirementQuest {
 
 const quests: Partial<Quest>[] = [
   {
-    id:"first_test_quest_gogo",
+    id: "first_test_quest_gogo",
     src: "https://ipfs.decentralized-content.com/ipfs/bafybeifs7vasy5zbmnpixt7tb6efi35kcrmpoz53d3vg5pwjz52q7fl6pq/cook.png",
     fid: "1",
     requirements: RequirementQuest?.FOLLOW,
-  
   },
   {
-    id:"second_test_quest_gogo",
+    id: "second_test_quest_gogo",
     src: "https://ipfs.decentralized-content.com/ipfs/bafybeifs7vasy5zbmnpixt7tb6efi35kcrmpoz53d3vg5pwjz52q7fl6pq/cook.png",
     fid: "500",
     requirements: RequirementQuest?.CAST,
-  
   },
 ];
 
@@ -78,6 +77,18 @@ const handleRequest = frames(async (ctx) => {
   let fid = ctx?.message?.requesterFid ?? 50;
   console.log("a fid", fid);
   const quest = quests[page];
+
+  // TODO get data based on ads
+  let data: undefined | any;
+
+  if (quest?.requirements == RequirementQuest?.FOLLOW) {
+    data = await getUserByFid(quest?.fid ?? (1 as number));
+  } else if (quest?.requirements == RequirementQuest?.CAST) {
+    data = await getCastByHash(quest?.castId as string);
+  } else if (quest?.requirements == RequirementQuest?.CHANNEL_JOINED) {
+    data = await getChannelByName(quest?.channelName as string);
+    console.log("data  channel", data);
+  }
 
   // users.map((u) => {
   //   console.log("user", u)

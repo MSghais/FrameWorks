@@ -37,6 +37,7 @@ const handleRequest = frames(async (ctx) => {
     method: "GET",
     headers: { Authorization: `Bearer ${process.env.PINATA_TOKEN}` },
   };
+
   let baseUrl = "https://api.pinata.cloud/v3/farcaster/users";
   let fid = ctx?.message?.requesterFid ?? 50;
   console.log("a fid", fid);

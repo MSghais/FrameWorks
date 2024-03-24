@@ -62,7 +62,7 @@ export default async function Home({ searchParams }: NextServerPageProps) {
     initialState,
     previousFrame
   );
-  let origin = previousFrame?.headers?.url;
+  let origin = previousFrame?.headers?.url ?? url;
 
   // Here: do a server side side effect either sync or async (using await), such as minting an NFT if you want.
   // example: load the users credentials & check they have an NFT

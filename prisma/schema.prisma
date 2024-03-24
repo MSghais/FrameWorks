@@ -33,6 +33,7 @@ enum QuestRequirements {
     REPLY
     CAST
     RECAST
+    CHANNEL_JOINED
 }
 
 model Quest {
@@ -40,8 +41,11 @@ model Quest {
   title     String?
   fid String?
   src String?
+  castId String?
+  channelName String?
   amountUpvote Int?
   requirements QuestRequirements?
+  type TypeAds?
   content   String
   owner    User?     @relation(fields: [ownerId], references: [id])
   ownerId  String? @db.ObjectId
