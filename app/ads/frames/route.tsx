@@ -75,7 +75,9 @@ const handleRequest = frames(async (ctx) => {
   const doQuest = ctx.searchParams?.doQuest;
   const adsDb = await client?.ads.findMany();
 
-  const ads: Partial<Ads>[] = [...adsInit, ...adsDb];
+  let ads: Partial<Ads>[] = [...adsInit, ...adsDb];
+
+  // ads.sort((a, b) => b?.totalAmount - a?.totalAmount);
   let searchParams = ctx?.searchParams;
   let href = ctx?.url?.href;
   // let origin = ctx?.url?.origin;

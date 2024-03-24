@@ -25,7 +25,7 @@ enum RequirementQuest {
 }
 
 const frames = createFrames({
-  basePath: "/feed/recommender",
+  basePath: "/feed/my_feed",
 });
 
 const handleRequest = frames(async (ctx) => {
@@ -49,13 +49,11 @@ const handleRequest = frames(async (ctx) => {
   let baseUrl = "https://api.pinata.cloud/v3/farcaster/users";
   let fid = ctx?.message?.requesterFid ?? 50;
   console.log("a fid", fid);
-  // let datas = await getCastByUserFid(fid);
-  let datas = await getCastsByFollowing(fid);
+  let datas = await getCastByUserFid(fid);
   console.log("datas", datas);
   let data = datas?.casts[page];
   console.log("data", data);
   return {
-    // image: ads[page]!.src,
     image: (
       <div
         style={{ display: "flex", flexDirection: "column" }}
@@ -102,6 +100,7 @@ const handleRequest = frames(async (ctx) => {
       <Button
         action="post"
         target={{
+          href:"/feed/boost",
           query: {
             pageIndex: String((page + 1) % datas?.length),
             selectedQuest: String(page),
@@ -110,7 +109,7 @@ const handleRequest = frames(async (ctx) => {
           },
         }}
       >
-        Do
+        Boost
       </Button>,
       <Button action="post" target={`${origin}/`}>
         Home

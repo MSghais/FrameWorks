@@ -103,7 +103,7 @@ export const getCastsByFollowing = async (fid: string) => {
     const castRes = await fetch(url, options);
     const json = await castRes.json();
     console.log("cast json", json);
-    const cast = json?.data?.casts as any[];
+    const cast = json?.data?.casts as any;
     return cast;
   };
 

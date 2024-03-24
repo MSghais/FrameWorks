@@ -137,6 +137,11 @@ export default async function Home({ searchParams }: NextServerPageProps) {
         >
           Recommendations
         </FrameButton>
+        <FrameButton action="post"
+        target="/feed/my_feed"
+        >
+          My feed
+        </FrameButton>
         <FrameButton
           action="post"
           target={`${origin}/`}
