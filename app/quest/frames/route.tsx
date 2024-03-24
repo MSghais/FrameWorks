@@ -27,9 +27,8 @@ enum RequirementQuest {
   LIKE = "LIKE",
   REPLY = "REPLY",
   RECAST = "RECAST",
-  CHANNEL_JOINED="CHANNEL_JOINED"
+  CHANNEL_JOINED = "CHANNEL_JOINED",
 }
-
 
 const quests: Partial<Quest>[] = [
   {
@@ -43,6 +42,13 @@ const quests: Partial<Quest>[] = [
     src: "https://ipfs.decentralized-content.com/ipfs/bafybeifs7vasy5zbmnpixt7tb6efi35kcrmpoz53d3vg5pwjz52q7fl6pq/cook.png",
     fid: "500",
     requirements: RequirementQuest?.CAST,
+  },
+  {
+    id: "3_test_quest_gogo",
+    src: "https://ipfs.decentralized-content.com/ipfs/bafybeifs7vasy5zbmnpixt7tb6efi35kcrmpoz53d3vg5pwjz52q7fl6pq/cook.png",
+    fid: "500",
+    channelName:"gm",
+    requirements: RequirementQuest?.CHANNEL_JOINED,
   },
 ];
 
@@ -171,6 +177,58 @@ const handleRequest = frames(async (ctx) => {
         </div>
 
         <img src={`${quests[page]!.src}`} width={"250"} height={"250"}></img>
+
+        {data && quest?.requirements == RequirementQuest?.FOLLOW && (
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <div style={{ display: "flex", flexDirection: "column" }}>
+              <p>{data?.display_name}</p>
+
+              {data?.pfp_url && (
+                <img src={data?.pfp_url} width={200} height={200}></img>
+              )}
+              <p>{data?.bio}</p>
+
+              <p>{data?.custody_address}</p>
+            </div>
+            <div style={{ display: "flex", flexDirection: "column" }}>
+              <p>Follower: {data?.follower_count}</p>
+              <p>Following: {data?.following_count}</p>
+            </div>
+          </div>
+        )}
+
+        {data && quest?.requirements == RequirementQuest?.CAST && (
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <div style={{ display: "flex", flexDirection: "column" }}>
+              <p>{data?.author?.display_name}</p>
+              <p>{data?.author?.bio}</p>
+
+              <p>{data?.custody_address}</p>
+              {data?.author?.pfp_url && (
+                <img src={data?.author?.pfp_url} width={150} height={150}></img>
+              )}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column" }}>
+              <p>{data?.content}</p>
+            </div>
+          </div>
+        )}
+
+        {data && quest?.requirements == RequirementQuest?.CHANNEL_JOINED && (
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <div style={{ display: "flex", flexDirection: "column" }}>
+              <p>{new Date(data?.created_at / 1000).toDateString()}</p>
+              <p>{data?.display_name}</p>
+              <p>{data?.description}</p>
+            </div>
+            <p>Lead fid: {data?.lead_fid}</p>
+            <p>Url: {data?.url}</p>
+
+            {data?.image_url && (
+              <img src={data?.image_url} width={200} height={200}></img>
+            )}
+          </div>
+        )}
       </div>
     ),
 

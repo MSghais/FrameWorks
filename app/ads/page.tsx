@@ -94,7 +94,7 @@ export default async function Home({ searchParams }: NextServerPageProps) {
             <div tw="flex flex-row">
               {frameMessage?.inputText
                 ? frameMessage.inputText
-                : "Explorer Feed"}
+                : "Explorer Feed Boosted"}
             </div>
             {frameMessage && (
               <div tw="flex flex-col">

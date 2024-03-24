@@ -127,7 +127,7 @@ export default async function Home({ searchParams }: NextServerPageProps) {
             )}
           </div>
         </FrameImage>
-        <FrameInput text="put some text here" />
+        {/* <FrameInput text="put some text here" /> */}
         <FrameButton>View whatever</FrameButton>
         <FrameButton action="post" target="/feed/recommender">
           Recommendations
@@ -138,9 +138,9 @@ export default async function Home({ searchParams }: NextServerPageProps) {
         <FrameButton action="post" target={`${origin}/`}>
           Home
         </FrameButton>
-        <FrameButton action="link" target={`https://wuwfi.xyz`}>
+        {/* <FrameButton action="link" target={`https://wuwfi.xyz`}>
           WUW Fi External
-        </FrameButton>
+        </FrameButton> */}
       </FrameContainer>
     </div>
   );
