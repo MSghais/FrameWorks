@@ -29,9 +29,10 @@ model Post {
 
 enum QuestRequirements {
     FOLLOW
+    FOLLOWER
+    CAST
     LIKE
     REPLY
-    CAST
     RECAST
     CHANNEL_JOINED
 }

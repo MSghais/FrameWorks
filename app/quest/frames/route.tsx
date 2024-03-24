@@ -24,16 +24,12 @@ enum RequirementQuest {
   FOLLOW = "FOLLOW",
   FOLLOWER = "FOLLOWER",
   CAST = "CAST",
+  LIKE = "LIKE",
+  REPLY = "REPLY",
   RECAST = "RECAST",
+  CHANNEL_JOINED="CHANNEL_JOINED"
 }
 
-// const quests: {
-//   src: string;
-//   tokenUrl: string;
-//   fid: number;
-//   castId?: number;
-//   requirements: RequirementQuest
-// }[] = [
 
 const quests: Partial<Quest>[] = [
   {
