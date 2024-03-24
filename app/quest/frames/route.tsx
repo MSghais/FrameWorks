@@ -13,7 +13,6 @@ import {
 } from "frames.js/next/server";
 import { LFGState, initialState, reducer } from "../../lfg/page";
 import { DEFAULT_DEBUGGER_HUB_URL } from "../../debug";
-// import { useRouter } from "next/navigation";
 enum RequirementQuest {
   FOLLOW = "FOLLOW",
   FOLLOWER = "FOLLOWER",
@@ -21,7 +20,7 @@ enum RequirementQuest {
   RECAST = "RECAST",
 }
 
-const nfts: {
+const quests: {
   src: string;
   tokenUrl: string;
   fid: number;
@@ -41,7 +40,7 @@ const nfts: {
     {
       src: "https://ipfs.decentralized-content.com/ipfs/bafybeifs7vasy5zbmnpixt7tb6efi35kcrmpoz53d3vg5pwjz52q7fl6pq/cook.png",
       fid: 500,
-      requirements: RequirementQuest?.FOLLOW,
+      requirements: RequirementQuest?.CAST,
       tokenUrl: getTokenUrl({
         address: "0x99de131ff1223c4f47316c0bb50e42f356dafdaa",
         chain: zora,
@@ -74,7 +73,7 @@ const handleRequest = frames(async (ctx) => {
   let baseUrl = 'https://api.pinata.cloud/v3/farcaster/users'
   let fid = ctx?.message?.requesterFid ?? 50
   console.log("a fid", fid);
-  const quest = nfts[page]
+  const quest = quests[page]
 
 
   // users.map((u) => {
@@ -108,13 +107,18 @@ const handleRequest = frames(async (ctx) => {
         <div
           style={{ display: "flex", flexDirection: "column" }}
         >
-          Fid: {quest?.fid}
+          Quest: {quest?.requirements}
         </div>
         <div
           style={{ display: "flex", flexDirection: "column" }}
         >
-          Quest: {quest?.requirements}
+          Fid: {quest?.fid}
         </div>
+
+        <img src={`${quest!.src}`}
+          width={'250'}
+          height={"250"}
+        ></img>
       </div>,
 
       // imageOptions: {
@@ -144,24 +148,26 @@ const handleRequest = frames(async (ctx) => {
   }
 
   return {
-    // image: nfts[page]!.src,
+    // image: quests[page]!.src,
     image: <div
       style={{ display: "flex", flexDirection: "column" }}
     // tw="w-full h-full bg-slate-700 text-white justify-center items-center flex flex-col"
     >
+      <div 
+        style={{ display: "flex", flexDirection: "column" }}
+      >
+        Quest: {quests[page]?.requirements}
+      </div>
       <div
         style={{ display: "flex", flexDirection: "column" }}
       >
-        Fid: {nfts[page]?.fid}
+        Fid: {quests[page]?.fid}
       </div>
-      <div // imageOptions: {
-        //   aspectRatio: "1:1",
-        // },
-        style={{ display: "flex", flexDirection: "column" }}
-      >
-        Quest: {nfts[page]?.requirements}
-      </div>
-      <img src={`${nfts[page]!.src}`}></img>
+
+      <img src={`${quests[page]!.src}`}
+        width={'250'}
+        height={"250"}
+      ></img>
     </div>,
 
     imageOptions: {
@@ -173,7 +179,7 @@ const handleRequest = frames(async (ctx) => {
         action="post"
         target={{
           query: {
-            pageIndex: String((page - 1) % nfts.length),
+            pageIndex: String((page - 1) % quests.length),
           },
         }}
       >
@@ -183,7 +189,7 @@ const handleRequest = frames(async (ctx) => {
         action="post"
         target={{
           query: {
-            pageIndex: String((page + 1) % nfts.length),
+            pageIndex: String((page + 1) % quests.length),
           },
         }}
       >
@@ -193,7 +199,7 @@ const handleRequest = frames(async (ctx) => {
         action="post"
         target={{
           query: {
-            pageIndex: String((page + 1) % nfts.length),
+            pageIndex: String((page + 1) % quests.length),
             selectedQuest: String(page),
             page: String(page),
             doQuest: true,

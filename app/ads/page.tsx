@@ -30,7 +30,7 @@ export const initialState = {
   step: 0,
   selectedQuest: 0,
   page: "initial",
-  quests?: []
+  quests: []
 };
 
 export const reducer: FrameReducer<LFGState> = (state, action) => {
@@ -50,7 +50,7 @@ export const reducer: FrameReducer<LFGState> = (state, action) => {
 
 // This is a react server component only
 export default async function Home({ searchParams }: NextServerPageProps) {
-  const url = currentURL("/quest");
+  const url = currentURL("/ads");
   const previousFrame = getPreviousFrame<LFGState>(searchParams);
   console.log("previousFrame", previousFrame);
 
@@ -88,9 +88,9 @@ export default async function Home({ searchParams }: NextServerPageProps) {
       </Link>
       <FrameContainer
         // postUrl="/lfg/frames"
-        postUrl="/quest/frames"
+        postUrl="/ads/frames"
 
-        pathname="/lfg"
+        pathname="/ads"
         state={state}
         previousFrame={previousFrame}
       >
@@ -98,7 +98,7 @@ export default async function Home({ searchParams }: NextServerPageProps) {
         <FrameImage aspectRatio="1.91:1">
           <div tw="w-full h-full bg-slate-700 text-white justify-center items-center flex flex-col">
             <div tw="flex flex-row">
-              {frameMessage?.inputText ? frameMessage.inputText : "Hello world"}
+              {frameMessage?.inputText ? frameMessage.inputText : "Explorer Feed"}
             </div>
             {frameMessage && (
               <div tw="flex flex-col">
@@ -127,26 +127,12 @@ export default async function Home({ searchParams }: NextServerPageProps) {
         </FrameImage>
         <FrameInput text="put some text here" />
         <FrameButton>
-          {state?.active === "1" ? "Active" : "Inactive"}
+          View whatever I Want
         </FrameButton>
-        <FrameButton>
-          {state?.active === "2" ? "Active" : "Inactive"}
-        </FrameButton>
-
-        {/* <FrameButton action="post" target="/lfg/frames">
-          LFG
-        </FrameButton> */}
-
-        <FrameButton action="link" target={`http://localhost:3010/?url=http%3A%2F%2Flocalhost%3A3000%2Flfg`}>
-          External
+        <FrameButton action="link" target={`https://wuwfi.xyz`}>
+          WUW Fi External
         </FrameButton>
 
-        {/* <FrameButton 
-        action="post"
-        post_url="/test"></FrameButton> */}
-        {/* <FrameButton action="link" target={`https://www.google.com`}>
-          External
-        </FrameButton> */}
       </FrameContainer>
     </div>
   );

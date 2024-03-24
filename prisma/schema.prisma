@@ -12,7 +12,7 @@ generator client {
 model User {
   id                String   @id @default(auto()) @map("_id") @db.ObjectId // Use String as the ID type
   name     String
-  fid String? @unique
+  fid String @unique
   address    String   @unique
   posts    Post[]
   quests    Quest[]
@@ -42,6 +42,54 @@ model Quest {
   amountUpvote Int?
   requirements QuestRequirements?
   content   String
-  author    User?     @relation(fields: [authorId], references: [id])
-  authorId  String? @db.ObjectId
+  owner    User?     @relation(fields: [ownerId], references: [id])
+  ownerId  String? @db.ObjectId
+  userQuestFinish UserQuestFinishType[]
 }
+type UserQuestFinishType {
+  fid String
+  name String?
+  createdAt Int?
+}
+
+model UserQuestFinish {
+  id                String   @id @default(auto()) @map("_id") @db.ObjectId // Use String as the ID type
+  fid String 
+  questId String 
+  questIndex String?
+  doneAt Int?
+}
+
+type TransactionAds {
+  id Int?
+  hash String?
+  amount Int 
+  questId String?
+  castId String?
+  fid String?
+}
+
+enum TypeAds {
+  QUEST 
+  CAST 
+  USER
+  CHANNEL
+  NFT
+}
+
+model Ads {
+  id                String   @id @default(auto()) @map("_id") @db.ObjectId // Use String as the ID type
+  questId String?
+  castId String?
+  fid String?
+  ownerFid String?
+  questIndex String?
+  createdAt Int?
+  type TypeAds
+  amount Int?
+  totalAmount Int?
+  lastPayment Int?
+  payments TransactionAds[]
+}
+
+

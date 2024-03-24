@@ -76,6 +76,7 @@ export default async function Home({ searchParams }: NextServerPageProps) {
   // example: load the users credentials & check they have an NFT
 
   console.log("info: state is:", state);
+  let origin = previousFrame?.headers?.url;
 
   // then, when done, return next frame
   return (
@@ -97,7 +98,9 @@ export default async function Home({ searchParams }: NextServerPageProps) {
         previousFrame={previousFrame}
       >
         {/* <FrameImage src="https://framesjs.org/og.png" /> */}
-        <FrameImage aspectRatio="1.91:1">
+        <FrameImage
+          aspectRatio="1.91:1"
+        >
           <div tw="w-full h-full bg-slate-700 text-white justify-center items-center flex flex-col"
             style={{ display: "flex", flexDirection: "column" }}
 
@@ -106,14 +109,17 @@ export default async function Home({ searchParams }: NextServerPageProps) {
               <div tw="flex flex-row">
                 WUW Frames
               </div>
-              <p tw="flex flex-row">
-                {frameMessage?.inputText ? frameMessage.inputText : "Check all Farcaster quest"}
 
-              </p>
-              <p tw="flex flex-row">
-                Keep building after
-              </p>
             </div>
+            <p
+              tw="flex flex-row"
+            >
+              {frameMessage?.inputText ? frameMessage.inputText : "Check all Farcaster quest"}
+
+            </p>
+            <p tw="flex flex-row">
+              Keep building after
+            </p>
             {frameMessage && (
               <div tw="flex flex-col">
                 <div tw="flex">
@@ -142,6 +148,13 @@ export default async function Home({ searchParams }: NextServerPageProps) {
         <FrameInput text="put some text here" />
         <FrameButton>
           {state?.active === "1" ? "Check quest" : "Inactive"}
+        </FrameButton>
+        <FrameButton
+          action="post"
+          target={`${origin}/`}
+
+        >
+          Home
         </FrameButton>
         {/* <FrameButton>
           {state?.active === "2" ? "Active" : "Inactive"}
