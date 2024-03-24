@@ -133,7 +133,7 @@ export default async function Home({ searchParams }: NextServerPageProps) {
           View whatever
         </FrameButton>
         <FrameButton action="post"
-        target="/feed/frames/recommender"
+        target="/feed/recommender"
         >
           Recommendations
         </FrameButton>

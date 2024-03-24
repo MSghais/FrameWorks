@@ -14,3 +14,13 @@ export const initialState = {
     selectedQuest: 0,
     page: "initial",
 };
+
+export interface ICastPinata {
+    author: {
+        display_name?:string,
+        bio?:string,
+        pfp_url?:string,
+    },
+    custody_address?:string,
+    content?:string,
+}

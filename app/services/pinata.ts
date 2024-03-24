@@ -93,6 +93,20 @@ export const getCastByUserFid = async (fid: string, fidToCheck?: number) => {
   return cast;
 };
 
+export const getCastsByFollowing = async (fid: string) => {
+    const options = {
+      method: "GET",
+      headers: { Authorization: `Bearer ${process.env.PINATA_TOKEN}` },
+    };
+    let baseUrl = "https://api.pinata.cloud/v3/farcaster/casts";
+    let url = `${baseUrl}?fid=${fid}&following=true`;
+    const castRes = await fetch(url, options);
+    const json = await castRes.json();
+    console.log("cast json", json);
+    const cast = json?.data?.casts as any[];
+    return cast;
+  };
+
 export const getChannelByName = async (name: string, fidToCheck?: number) => {
   const options = {
     method: "GET",

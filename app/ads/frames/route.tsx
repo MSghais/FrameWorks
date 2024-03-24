@@ -154,7 +154,6 @@ const handleRequest = frames(async (ctx) => {
             </div>
             <div style={{ display: "flex", flexDirection: "column" }}>
               <p>{data?.content}</p>
-              <p>Following: {data?.following_count}</p>
             </div>
           </div>
         )}
