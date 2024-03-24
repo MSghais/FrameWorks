@@ -11,15 +11,14 @@ import {
   getPreviousFrame,
   useFramesReducer,
 } from "frames.js/next/server";
-import { LFGState, initialState, reducer } from "../../lfg/page";
 import { DEFAULT_DEBUGGER_HUB_URL } from "../../debug";
 import {
   addUser,
-  getUserByFid,
   getUserByFidDb,
   userValidQuest,
 } from "../../services";
 import { Quest } from "@prisma/client";
+import { LFGState } from "../../types";
 enum RequirementQuest {
   FOLLOW = "FOLLOW",
   FOLLOWER = "FOLLOWER",
@@ -35,26 +34,20 @@ enum RequirementQuest {
 //   requirements: RequirementQuest
 // }[] = [
 
-const quests: Quest[] = [
+const quests: Partial<Quest>[] = [
   {
+    id:"first_test_quest_gogo",
     src: "https://ipfs.decentralized-content.com/ipfs/bafybeifs7vasy5zbmnpixt7tb6efi35kcrmpoz53d3vg5pwjz52q7fl6pq/cook.png",
-    fid: 1,
+    fid: "1",
     requirements: RequirementQuest?.FOLLOW,
-    tokenUrl: getTokenUrl({
-      address: "0x99de131ff1223c4f47316c0bb50e42f356dafdaa",
-      chain: zora,
-      tokenId: "2",
-    }),
+  
   },
   {
+    id:"second_test_quest_gogo",
     src: "https://ipfs.decentralized-content.com/ipfs/bafybeifs7vasy5zbmnpixt7tb6efi35kcrmpoz53d3vg5pwjz52q7fl6pq/cook.png",
-    fid: 500,
+    fid: "500",
     requirements: RequirementQuest?.CAST,
-    tokenUrl: getTokenUrl({
-      address: "0x99de131ff1223c4f47316c0bb50e42f356dafdaa",
-      chain: zora,
-      tokenId: "2",
-    }),
+  
   },
 ];
 
@@ -93,7 +86,6 @@ const handleRequest = frames(async (ctx) => {
   if (page && doQuest) {
     // Follow the user quest
     if (quest?.requirements == RequirementQuest.FOLLOW) {
-      // let url = `${baseUrl}?fid=${fid}`
       let url = `${baseUrl}?fid=${quest?.fid}&followers=true`;
       // let url = `${baseUrl}?fid=${fid}&followers=true`
       const usersRes = await fetch(url, options);
@@ -108,13 +100,12 @@ const handleRequest = frames(async (ctx) => {
       // Tips with meme token
 
       let userDb = await getUserByFidDb({ userFid: fid });
-
       if (!userDb) {
         userDb = await addUser({ userFid: fid });
       }
-      userValidQuest({
+      let userValid = await userValidQuest({
         userFid: fid,
-        questId: quest?.id,
+        questId: quest?.id ?? "first_test_quest_gogo",
       });
     }
 

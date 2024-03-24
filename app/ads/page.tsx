@@ -29,16 +29,16 @@ const initialState ={
   // ads: []
 };
 
-export const reducer: FrameReducer<AdsState> = (state, action) => {
+const reducer: FrameReducer<AdsState> = (state, action) => {
   return {
-    ...state,
-    // step: 0,
-    // selectedQuest: 0,
-    // page: "initial",
-    // active: action.postBody?.untrustedData.buttonIndex
-    //   ? String(action.postBody?.untrustedData.buttonIndex)
-      // : "1",
-    // ads: []
+    // ...state,
+    step: 0,
+    selectedQuest: 0,
+    page: "initial",
+    active: action.postBody?.untrustedData.buttonIndex
+      ? String(action.postBody?.untrustedData.buttonIndex)
+      : "1",
+    ads: []
   };
 };
 

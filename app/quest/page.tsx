@@ -21,7 +21,7 @@ export type LFGState = {
   step: number;
   selectedQuest: number;
   page?: string | "initial" | "result";
-  quests?: Partial<Quest>[];
+  // quests?: Partial<Quest>[];
   pageIndex?: number;
   doQuest?: boolean;
 };
@@ -33,11 +33,11 @@ const initialState = {
   selectedQuest: 0,
   page: "initial",
   pageIndex: 0,
-  quests: [],
+  // quests: [],
   doQuest: false,
 };
 
-export const reducer: FrameReducer<LFGState> = (state, action) => {
+const reducer: FrameReducer<LFGState> = (state, action) => {
   return {
     // total_button_presses: state.total_button_presses + 1,
     step: 0,
@@ -48,7 +48,7 @@ export const reducer: FrameReducer<LFGState> = (state, action) => {
     active: action.postBody?.untrustedData.buttonIndex
       ? String(action.postBody?.untrustedData.buttonIndex)
       : "1",
-    quests: [],
+    // quests: [],
   };
 };
 

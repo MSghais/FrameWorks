@@ -12,8 +12,7 @@ import {
 import Link from "next/link";
 import { DEFAULT_DEBUGGER_HUB_URL, createDebugUrl } from "./debug";
 import { currentURL } from "./utils";
-import { Button } from "frames.js/next";
-import { Quest } from "prisma"
+import { Quest } from "prisma";
 
 export type LFGState = {
   active: string;
@@ -21,25 +20,23 @@ export type LFGState = {
   step: number;
   selectedQuest: number;
   page?: string | "initial" | "result";
-  quests?: Partial<Quest>[],
-  pageIndex?: number,
+  // quests?: Partial<Quest>[];
+  pageIndex?: number;
   doQuest?: boolean;
 };
 
-export const initialState = {
+const initialState = {
   active: "1",
-  // total_button_presses: 0,
   step: 0,
   selectedQuest: 0,
   page: "initial",
   pageIndex: 0,
-  quests: [],
+  // quests: [],
   doQuest: false,
 };
 
-export const reducer: FrameReducer<LFGState> = (state, action) => {
+const reducer: FrameReducer<LFGState> = (state, action) => {
   return {
-    // total_button_presses: state.total_button_presses + 1,
     step: 0,
     doQuest: false,
     selectedQuest: 0,
@@ -48,7 +45,7 @@ export const reducer: FrameReducer<LFGState> = (state, action) => {
     active: action.postBody?.untrustedData.buttonIndex
       ? String(action.postBody?.untrustedData.buttonIndex)
       : "1",
-    quests: []
+    // quests: [],
   };
 };
 
@@ -100,22 +97,15 @@ export default async function Home({ searchParams }: NextServerPageProps) {
         <FrameImage aspectRatio="1.91:1">
           <div tw="w-full h-full bg-slate-700 text-white justify-center items-center flex flex-col text-left">
             <div tw="flex flex-row">
-              <p
-              >
-                WUW Frames:
-              </p>
+              <p>WUW Frames:</p>
             </div>
             <p
             //  tw="flex flex-row"
             >
               Quest and Ads for Farcaster
+            </p>
+            <p>Keep building after: @WUW_WhateverFi</p>
 
-            </p>
-            <p
-            >
-              Keep building after: @WUW_WhateverFi
-            </p>
-           
             {frameMessage && (
               <div tw="flex flex-col">
                 <div tw="flex">

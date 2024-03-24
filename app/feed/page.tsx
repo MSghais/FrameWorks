@@ -33,7 +33,7 @@ const initialState = {
   ads: [],
 };
 
-export const reducer: FrameReducer<AdsState> = (state, action) => {
+const reducer: FrameReducer<AdsState> = (state, action) => {
   //   const buttonIndex = action.postBody?.untrustedData.buttonIndex;
 
   return {

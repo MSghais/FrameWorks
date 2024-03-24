@@ -11,25 +11,25 @@ import {
   getPreviousFrame,
   useFramesReducer,
 } from "frames.js/next/server";
-import { LFGState, initialState, reducer } from "../../lfg/page";
 import { DEFAULT_DEBUGGER_HUB_URL } from "../../debug";
+import { LFGState } from "../../types";
 // import { useRouter } from "next/navigation";
 
 enum RequirementQuest {
-  FOLLOW="FOLLOW",
-  CAST="CAST",
-  RECAST="RECAST",
+  FOLLOW = "FOLLOW",
+  CAST = "CAST",
+  RECAST = "RECAST",
 }
 const nfts: {
   src: string;
   tokenUrl: string;
-  fid?:number;
-  castId?:number;
-  requirements?:RequirementQuest
+  fid?: number;
+  castId?: number;
+  requirements?: RequirementQuest;
 }[] = [
   {
     src: "https://ipfs.decentralized-content.com/ipfs/bafybeifs7vasy5zbmnpixt7tb6efi35kcrmpoz53d3vg5pwjz52q7fl6pq/cook.png",
-    fid:1,
+    fid: 1,
     tokenUrl: getTokenUrl({
       address: "0x99de131ff1223c4f47316c0bb50e42f356dafdaa",
       chain: zora,
@@ -72,14 +72,17 @@ const handleRequest = frames(async (ctx) => {
   console.log("previousFrame", previousFrame);
   const total_button_presses = searchParams?.total_button_presses;
   // const options = {method: 'GET', headers: {Authorization: 'Bearer <token>'}};
-  const options = {method: 'GET', headers: {Authorization: `Bearer ${process.env.PINATA_TOKEN}`}};
-  let baseUrl = 'https://api.pinata.cloud/v3/farcaster/users'
-  let fid = ctx?.message?.requesterFid ?? 50 
+  const options = {
+    method: "GET",
+    headers: { Authorization: `Bearer ${process.env.PINATA_TOKEN}` },
+  };
+  let baseUrl = "https://api.pinata.cloud/v3/farcaster/users";
+  let fid = ctx?.message?.requesterFid ?? 50;
   console.log("a fid", fid);
-  let url = `${baseUrl}?fid=${fid}`
+  let url = `${baseUrl}?fid=${fid}`;
   // const users = await fetch('https://api.pinata.cloud/v3/farcaster/users', options)
-  const users = await fetch(url, options)
-  console.log("users",users.json())
+  const users = await fetch(url, options);
+  console.log("users", users.json());
 
   return {
     image: nfts[page]!.src,
@@ -108,22 +111,19 @@ const handleRequest = frames(async (ctx) => {
         →
       </Button>,
       <Button
-      action="post"
-      target={{
-        query: {
-          pageIndex: String((page + 1) % nfts.length),
-        },
-      }}
-    >
-      Do quest
-    </Button>,
-      <Button action="mint" target={nfts[page]!.tokenUrl}>
-        Mint
-      </Button>,
-      <Button
-        action="post" 
-        target={`${origin}/lfg`}
+        action="post"
+        target={{
+          query: {
+            pageIndex: String((page + 1) % nfts.length),
+          },
+        }}
       >
+        Do quest
+      </Button>,
+      // <Button action="mint" target={nfts[page]!.tokenUrl}>
+      //   Mint
+      // </Button>,
+      <Button action="post" target={`${origin}/lfg`}>
         Home
       </Button>,
     ],
