@@ -11,11 +11,11 @@ import {
   getPreviousFrame,
   useFramesReducer,
 } from "frames.js/next/server";
-import { LFGState, initialState, reducer } from "../../lfg/page";
 import { DEFAULT_DEBUGGER_HUB_URL } from "../../debug";
 import { Ads, PrismaClient, TypeAds } from "@prisma/client";
+import { LFGState } from "../../types";
+import { AdsState } from "../page";
 const client = new PrismaClient()
-// import { useRouter } from "next/navigation";
 enum RequirementQuest {
   FOLLOW = "FOLLOW",
   FOLLOWER = "FOLLOWER",
@@ -32,12 +32,30 @@ const adsInit: Partial<Ads>[] = [
     type: TypeAds?.USER,
 
   },
+  {
+    fid: "1",
+    castId:"500",
+    channelId: "",
+    // ownerId
+    amount: 10,
+    totalAmount: 100,
+    type: TypeAds?.CAST,
 
+  },
+  {
+    fid: "1",
+    channelId: "",
+    // ownerId
+    amount: 10,
+    totalAmount: 100,
+    type: TypeAds?.CHANNEL,
+
+  },
 
 ];
 
 const frames = createFrames({
-  basePath: "/quest/frames",
+  basePath: "/ads/frames",
 });
 
 const handleRequest = frames(async (ctx) => {
@@ -56,7 +74,7 @@ const handleRequest = frames(async (ctx) => {
   let message = ctx?.message;
   const active = searchParams?.active;
   console.log("active", active);
-  const previousFrame = getPreviousFrame<LFGState>(searchParams);
+  const previousFrame = getPreviousFrame<AdsState>(searchParams);
   console.log("previousFrame", previousFrame);
   const options = { method: 'GET', headers: { Authorization: `Bearer ${process.env.PINATA_TOKEN}` } };
   let baseUrl = 'https://api.pinata.cloud/v3/farcaster/users'
@@ -64,44 +82,56 @@ const handleRequest = frames(async (ctx) => {
   console.log("a fid", fid);
   const quest = ads[page]
 
+  // TODO get data based on ads
+  let data:undefined|any;
+
+  if(quest?.type == TypeAds?.USER) {
+
+  } else if(quest?.type == TypeAds?.CHANNEL) {
+
+  } else if(quest?.type == TypeAds?.CAST) {
+
+  }
+
   return {
     // image: ads[page]!.src,
     image: <div
       style={{ display: "flex", flexDirection: "column", }}
       tw="w-full h-full bg-slate-700 text-white justify-center items-center flex flex-col"
     >
-      {ads[page]?.type &&
-        <p>{ads[page]?.type}</p>
+      {quest?.type &&
+        <p>{quest?.type}</p>
       }
 
-      {ads[page]?.fid &&
+      {quest?.fid &&
         <div
           style={{ display: "flex", flexDirection: "column" }}
         >
-          Fid: {ads[page]?.fid}
+          Fid: {quest?.fid}
         </div>
-
       }
 
-
-      {ads[page]?.castId &&
-        <div // imageOptions: {
-          //   aspectRatio: "1:1",
-          // },
+      {quest?.castId &&
+        <div
           style={{ display: "flex", flexDirection: "column" }}
         >
-          CastId: {ads[page]?.castId}
+          CastId: {quest?.castId}
         </div>
       }
 
-      <div // imageOptions: {
-        //   aspectRatio: "1:1",
-        // },
-        style={{ display: "flex", flexDirection: "column" }}
-      >
-        Quest: {ads[page]?.questId}
-      </div>
-      {/* <img src={`${ads[page]!.src}`}></img> */}
+      {quest?.questId &&
+        <div
+          style={{ display: "flex", flexDirection: "column" }}
+        >
+          Quest: {quest?.questId}
+        </div>
+      }
+
+      {/* {ads[page]?.image &&
+        <img src={`${ads[page]!.image}`}></img>
+
+      } */}
+
     </div>,
 
     // imageOptions: {

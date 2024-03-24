@@ -14,14 +14,15 @@ import { DEFAULT_DEBUGGER_HUB_URL, createDebugUrl } from "../debug";
 import { currentURL } from "../utils";
 import { Button } from "frames.js/next";
 import { Quest } from "prisma"
+import { Ads } from "@prisma/client";
 
-export type LFGState = {
+export type AdsState = {
   active: string;
   total_button_presses: number;
   step: number;
   selectedQuest: number;
   page?: string | "initial" | "result";
-  quests?: Partial<Quest>[]
+  ads?: Partial<Ads>[]
 };
 
 export const initialState = {
@@ -30,10 +31,10 @@ export const initialState = {
   step: 0,
   selectedQuest: 0,
   page: "initial",
-  quests: []
+  ads: []
 };
 
-export const reducer: FrameReducer<LFGState> = (state, action) => {
+export const reducer: FrameReducer<AdsState> = (state, action) => {
   //   const buttonIndex = action.postBody?.untrustedData.buttonIndex;
 
   return {
@@ -44,14 +45,14 @@ export const reducer: FrameReducer<LFGState> = (state, action) => {
     active: action.postBody?.untrustedData.buttonIndex
       ? String(action.postBody?.untrustedData.buttonIndex)
       : "1",
-    quests: []
+    ads: []
   };
 };
 
 // This is a react server component only
 export default async function Home({ searchParams }: NextServerPageProps) {
   const url = currentURL("/ads");
-  const previousFrame = getPreviousFrame<LFGState>(searchParams);
+  const previousFrame = getPreviousFrame<AdsState>(searchParams);
   console.log("previousFrame", previousFrame);
 
   const frameMessage = await getFrameMessage(previousFrame.postBody, {
@@ -63,7 +64,7 @@ export default async function Home({ searchParams }: NextServerPageProps) {
   }
   console.log("frameMessage is:", frameMessage);
 
-  const [state, dispatch] = useFramesReducer<LFGState>(
+  const [state, dispatch] = useFramesReducer<AdsState>(
     reducer,
     initialState,
     previousFrame

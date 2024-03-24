@@ -82,6 +82,7 @@ model Ads {
   questId String?
   castId String?
   fid String?
+  channelId String?
   ownerFid String?
   questIndex String?
   createdAt Int?
@@ -89,6 +90,7 @@ model Ads {
   amount Int?
   totalAmount Int?
   lastPayment Int?
+  image String?
   payments TransactionAds[]
 }
 
