@@ -43,8 +43,8 @@ const handleRequest = frames(async (ctx) => {
   console.log("a fid", fid);
   // let datas = await getCastByUserFid(fid);
   let datas = await getCastsByFollowing(fid);
-  console.log("datas", datas);
-  let data = datas?.casts[page];
+  console.log("datas", datas?.casts?.length);
+  let data = datas[page ?? 0];
   console.log("data", data);
   return {
     // image: ads[page]!.src,
