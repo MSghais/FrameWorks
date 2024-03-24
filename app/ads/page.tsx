@@ -2,7 +2,6 @@ import {
   FrameButton,
   FrameContainer,
   FrameImage,
-  FrameInput,
   FrameReducer,
   NextServerPageProps,
   getFrameMessage,
@@ -12,18 +11,17 @@ import {
 import Link from "next/link";
 import { DEFAULT_DEBUGGER_HUB_URL, createDebugUrl } from "../debug";
 import { currentURL } from "../utils";
-import { Button } from "frames.js/next";
-import { Ads } from "@prisma/client";
 
 export type AdsState = {
   active: string;
   step: number;
   selectedQuest: number;
-  page?: string | "initial" | "result";
+  // page?: string | "initial" | "result";
+  page: string;
   // ads?: Partial<Ads>[]
-}
+};
 
-export const initialState = {
+const initialState ={
   active: "1",
   step: 0,
   selectedQuest: 0,
@@ -33,12 +31,13 @@ export const initialState = {
 
 export const reducer: FrameReducer<AdsState> = (state, action) => {
   return {
-    step: 0,
-    selectedQuest: 0,
-    page: "initial",
-    active: action.postBody?.untrustedData.buttonIndex
-      ? String(action.postBody?.untrustedData.buttonIndex)
-      : "1",
+    ...state,
+    // step: 0,
+    // selectedQuest: 0,
+    // page: "initial",
+    // active: action.postBody?.untrustedData.buttonIndex
+    //   ? String(action.postBody?.untrustedData.buttonIndex)
+      // : "1",
     // ads: []
   };
 };
@@ -85,7 +84,6 @@ export default async function Home({ searchParams }: NextServerPageProps) {
       <FrameContainer
         // postUrl="/lfg/frames"
         postUrl="/ads/frames"
-
         pathname="/ads"
         state={state}
         previousFrame={previousFrame}
@@ -94,7 +92,9 @@ export default async function Home({ searchParams }: NextServerPageProps) {
         <FrameImage aspectRatio="1.91:1">
           <div tw="w-full h-full bg-slate-700 text-white justify-center items-center flex flex-col">
             <div tw="flex flex-row">
-              {frameMessage?.inputText ? frameMessage.inputText : "Explorer Feed"}
+              {frameMessage?.inputText
+                ? frameMessage.inputText
+                : "Explorer Feed"}
             </div>
             {frameMessage && (
               <div tw="flex flex-col">
@@ -122,20 +122,13 @@ export default async function Home({ searchParams }: NextServerPageProps) {
           </div>
         </FrameImage>
         {/* <FrameInput text="put some text here" /> */}
-        <FrameButton>
-          View whatever I Want
-        </FrameButton>
-        <FrameButton
-          action="post"
-          target={`${origin}/`}
-
-        >
+        <FrameButton>View whatever I Want</FrameButton>
+        <FrameButton action="post" target={`${origin}/`}>
           Home
         </FrameButton>
         <FrameButton action="link" target={`https://wuwfi.xyz`}>
           WUW Fi External
         </FrameButton>
-
       </FrameContainer>
     </div>
   );

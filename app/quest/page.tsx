@@ -13,7 +13,7 @@ import Link from "next/link";
 import { DEFAULT_DEBUGGER_HUB_URL, createDebugUrl } from "../debug";
 import { currentURL } from "../utils";
 import { Button } from "frames.js/next";
-import { Quest } from "prisma"
+import { Quest } from "prisma";
 
 export type LFGState = {
   active: string;
@@ -21,12 +21,12 @@ export type LFGState = {
   step: number;
   selectedQuest: number;
   page?: string | "initial" | "result";
-  quests?: Partial<Quest>[],
-  pageIndex?: number,
+  quests?: Partial<Quest>[];
+  pageIndex?: number;
   doQuest?: boolean;
 };
 
-export const initialState = {
+const initialState = {
   active: "1",
   // total_button_presses: 0,
   step: 0,
@@ -48,7 +48,7 @@ export const reducer: FrameReducer<LFGState> = (state, action) => {
     active: action.postBody?.untrustedData.buttonIndex
       ? String(action.postBody?.untrustedData.buttonIndex)
       : "1",
-    quests: []
+    quests: [],
   };
 };
 
@@ -98,28 +98,20 @@ export default async function Home({ searchParams }: NextServerPageProps) {
         previousFrame={previousFrame}
       >
         {/* <FrameImage src="https://framesjs.org/og.png" /> */}
-        <FrameImage
-          aspectRatio="1.91:1"
-        >
-          <div tw="w-full h-full bg-slate-700 text-white justify-center items-center flex flex-col"
+        <FrameImage aspectRatio="1.91:1">
+          <div
+            tw="w-full h-full bg-slate-700 text-white justify-center items-center flex flex-col"
             style={{ display: "flex", flexDirection: "column" }}
-
           >
             <div tw="flex flex-row">
-              <div tw="flex flex-row">
-                WUW Frames
-              </div>
-
+              <div tw="flex flex-row">WUW Frames</div>
             </div>
-            <p
-              tw="flex flex-row"
-            >
-              {frameMessage?.inputText ? frameMessage.inputText : "Check all Farcaster quest"}
-
-            </p>
             <p tw="flex flex-row">
-              Keep building after
+              {frameMessage?.inputText
+                ? frameMessage.inputText
+                : "Check all Farcaster quest"}
             </p>
+            <p tw="flex flex-row">Keep building after</p>
             {frameMessage && (
               <div tw="flex flex-col">
                 <div tw="flex">
@@ -149,11 +141,7 @@ export default async function Home({ searchParams }: NextServerPageProps) {
         <FrameButton>
           {state?.active === "1" ? "Check quest" : "Inactive"}
         </FrameButton>
-        <FrameButton
-          action="post"
-          target={`${origin}/`}
-
-        >
+        <FrameButton action="post" target={`${origin}/`}>
           Home
         </FrameButton>
         {/* <FrameButton>
@@ -168,7 +156,10 @@ export default async function Home({ searchParams }: NextServerPageProps) {
         {/* <FrameButton action="post" target="/lfg/frames">
           LFG
         </FrameButton> */}
-        <FrameButton action="link" target={`http://localhost:3010/?url=http%3A%2F%2Flocalhost%3A3000%2Flfg`}>
+        <FrameButton
+          action="link"
+          target={`http://localhost:3010/?url=http%3A%2F%2Flocalhost%3A3000%2Flfg`}
+        >
           External
         </FrameButton>
 

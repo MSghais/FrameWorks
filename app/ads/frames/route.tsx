@@ -1,19 +1,6 @@
 /* eslint-disable react/jsx-key */
 import { Button, createFrames } from "frames.js/next";
-import { getFrameMessage, getTokenUrl } from "frames.js";
-import { zora } from "viem/chains";
-import {
-  FrameButton,
-  FrameContainer,
-  FrameImage,
-  FrameInput,
-  FrameReducer,
-  getPreviousFrame,
-  useFramesReducer,
-} from "frames.js/next/server";
-import { DEFAULT_DEBUGGER_HUB_URL } from "../../debug";
 import { Ads, PrismaClient, TypeAds } from "@prisma/client";
-import { LFGState } from "../../types";
 import { AdsState } from "../page";
 import {
   getCastByHash,
@@ -41,7 +28,6 @@ const adsInit: Partial<Ads>[] = [
     castId: "0x9733fce86e174d1b2d8ba614c7cc0e2ba5372a97",
     channelName: "gm",
     channelId: "",
-    // ownerId
     amount: 10,
     totalAmount: 100,
     type: TypeAds?.CAST,
@@ -69,26 +55,17 @@ const frames = createFrames({
 
 const handleRequest = frames(async (ctx) => {
   console.log("ctx", ctx);
-  // const router = useRouter()
   const page = Number(ctx.searchParams?.pageIndex ?? 0);
   const selectedQuest = Number(ctx.searchParams?.selectedQuest ?? undefined);
   const doQuest = ctx.searchParams?.doQuest;
   const adsDb = await client?.ads.findMany();
-
   let ads: Partial<Ads>[] = [...adsInit, ...adsDb];
-
   // ads.sort((a, b) => b?.totalAmount - a?.totalAmount);
   let searchParams = ctx?.searchParams;
   let href = ctx?.url?.href;
-  // let origin = ctx?.url?.origin;
-
   let message = ctx?.message;
   const active = searchParams?.active;
   console.log("active", active);
-  const previousFrame = getPreviousFrame<AdsState>(searchParams);
-
-  console.log("previousFrame", previousFrame);
-  let origin = previousFrame?.headers?.url;
   const options = {
     method: "GET",
     headers: { Authorization: `Bearer ${process.env.PINATA_TOKEN}` },
@@ -97,7 +74,6 @@ const handleRequest = frames(async (ctx) => {
   let fid = ctx?.message?.requesterFid ?? 50;
   console.log("a fid", fid);
   const quest = ads[page];
-
   // TODO get data based on ads
   let data: undefined | any;
 
@@ -175,19 +151,6 @@ const handleRequest = frames(async (ctx) => {
             )}
           </div>
         )}
-
-        {/* {data && quest?.type && TypeAds?.CAST && (
-          <div style={{ display: "flex", flexDirection: "column" }}>
-            <div style={{ display: "flex", flexDirection: "column" }}>
-              <p>{data?.bio}</p>
-
-              <p>{data?.custody_address}</p>
-              <p>{data?.display_name}</p>
-              <p>{data?.follower_count}</p>
-              <p>{data?.following_count}</p>
-            </div>
-          </div>
-        )} */}
 
         {quest?.castId && (
           <div style={{ display: "flex", flexDirection: "column" }}>

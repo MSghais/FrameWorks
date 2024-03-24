@@ -12,8 +12,7 @@ import {
 import Link from "next/link";
 import { DEFAULT_DEBUGGER_HUB_URL, createDebugUrl } from "../debug";
 import { currentURL } from "../utils";
-import { Button } from "frames.js/next";
-import { Quest } from "prisma"
+import { Quest } from "prisma";
 import { Ads } from "@prisma/client";
 
 export type AdsState = {
@@ -21,17 +20,17 @@ export type AdsState = {
   total_button_presses: number;
   step: number;
   selectedQuest: number;
-  page?: string | "initial" | "result";
-  ads?: Partial<Ads>[]
+  page?: string;
+  ads?: Partial<Ads>[];
 };
 
-export const initialState = {
+const initialState = {
   active: "1",
   total_button_presses: 0,
   step: 0,
   selectedQuest: 0,
   page: "initial",
-  ads: []
+  ads: [],
 };
 
 export const reducer: FrameReducer<AdsState> = (state, action) => {
@@ -45,7 +44,7 @@ export const reducer: FrameReducer<AdsState> = (state, action) => {
     active: action.postBody?.untrustedData.buttonIndex
       ? String(action.postBody?.untrustedData.buttonIndex)
       : "1",
-    ads: []
+    ads: [],
   };
 };
 
@@ -71,7 +70,6 @@ export default async function Home({ searchParams }: NextServerPageProps) {
   );
   let origin = previousFrame?.headers?.url;
 
-
   // Here: do a server side side effect either sync or async (using await), such as minting an NFT if you want.
   // example: load the users credentials & check they have an NFT
 
@@ -92,7 +90,6 @@ export default async function Home({ searchParams }: NextServerPageProps) {
       <FrameContainer
         // postUrl="/lfg/frames"
         postUrl="/ads/frames"
-
         pathname="/ads"
         state={state}
         previousFrame={previousFrame}
@@ -101,7 +98,9 @@ export default async function Home({ searchParams }: NextServerPageProps) {
         <FrameImage aspectRatio="1.91:1">
           <div tw="w-full h-full bg-slate-700 text-white justify-center items-center flex flex-col">
             <div tw="flex flex-row">
-              {frameMessage?.inputText ? frameMessage.inputText : "Explorer Feed"}
+              {frameMessage?.inputText
+                ? frameMessage.inputText
+                : "Explorer Feed"}
             </div>
             {frameMessage && (
               <div tw="flex flex-col">
@@ -129,29 +128,19 @@ export default async function Home({ searchParams }: NextServerPageProps) {
           </div>
         </FrameImage>
         <FrameInput text="put some text here" />
-        <FrameButton>
-          View whatever
-        </FrameButton>
-        <FrameButton action="post"
-        target="/feed/recommender"
-        >
+        <FrameButton>View whatever</FrameButton>
+        <FrameButton action="post" target="/feed/recommender">
           Recommendations
         </FrameButton>
-        <FrameButton action="post"
-        target="/feed/my_feed"
-        >
+        <FrameButton action="post" target="/feed/my_feed">
           My feed
         </FrameButton>
-        <FrameButton
-          action="post"
-          target={`${origin}/`}
-        >
+        <FrameButton action="post" target={`${origin}/`}>
           Home
         </FrameButton>
         <FrameButton action="link" target={`https://wuwfi.xyz`}>
           WUW Fi External
         </FrameButton>
-
       </FrameContainer>
     </div>
   );

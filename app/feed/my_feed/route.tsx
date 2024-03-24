@@ -3,26 +3,12 @@ import { Button, createFrames } from "frames.js/next";
 import { getFrameMessage, getTokenUrl } from "frames.js";
 import { zora } from "viem/chains";
 import {
-  FrameButton,
-  FrameContainer,
-  FrameImage,
-  FrameInput,
-  FrameReducer,
+
   getPreviousFrame,
-  useFramesReducer,
 } from "frames.js/next/server";
-import { DEFAULT_DEBUGGER_HUB_URL } from "../../debug";
-import { Ads, PrismaClient, TypeAds } from "@prisma/client";
 import { LFGState } from "../../types";
 import { AdsState } from "../page";
 import { getCastByHash, getCastByUserFid, getCastsByFollowing } from "../../services/pinata";
-const client = new PrismaClient();
-enum RequirementQuest {
-  FOLLOW = "FOLLOW",
-  FOLLOWER = "FOLLOWER",
-  CAST = "CAST",
-  RECAST = "RECAST",
-}
 
 const frames = createFrames({
   basePath: "/feed/my_feed",
