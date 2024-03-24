@@ -10,53 +10,51 @@ import {
   useFramesReducer,
 } from "frames.js/next/server";
 import Link from "next/link";
-import { DEFAULT_DEBUGGER_HUB_URL, createDebugUrl } from "./debug";
-import { currentURL } from "./utils";
+import { DEFAULT_DEBUGGER_HUB_URL, createDebugUrl } from "../debug";
+import { currentURL } from "../utils";
 import { Button } from "frames.js/next";
 import { Quest } from "prisma"
+import { Ads } from "@prisma/client";
 
-export type LFGState = {
+export type AdsState = {
   active: string;
-  // total_button_presses: number;
+  total_button_presses: number;
   step: number;
   selectedQuest: number;
   page?: string | "initial" | "result";
-  quests?: Partial<Quest>[],
-  pageIndex?: number,
-  doQuest?: boolean;
+  ads?: Partial<Ads>[]
 };
 
 export const initialState = {
   active: "1",
-  // total_button_presses: 0,
+  total_button_presses: 0,
   step: 0,
   selectedQuest: 0,
   page: "initial",
-  pageIndex: 0,
-  quests: [],
-  doQuest: false,
+  ads: []
 };
 
-export const reducer: FrameReducer<LFGState> = (state, action) => {
+export const reducer: FrameReducer<AdsState> = (state, action) => {
+  //   const buttonIndex = action.postBody?.untrustedData.buttonIndex;
+
   return {
-    // total_button_presses: state.total_button_presses + 1,
+    total_button_presses: state.total_button_presses + 1,
     step: 0,
-    doQuest: false,
     selectedQuest: 0,
-    pageIndex: 0,
     page: "initial",
     active: action.postBody?.untrustedData.buttonIndex
       ? String(action.postBody?.untrustedData.buttonIndex)
       : "1",
-    quests: []
+    ads: []
   };
 };
 
 // This is a react server component only
 export default async function Home({ searchParams }: NextServerPageProps) {
-  const url = currentURL("/quest");
-  const previousFrame = getPreviousFrame<LFGState>(searchParams);
+  const url = currentURL("/feed");
+  const previousFrame = getPreviousFrame<AdsState>(searchParams);
   console.log("previousFrame", previousFrame);
+
   const frameMessage = await getFrameMessage(previousFrame.postBody, {
     hubHttpUrl: DEFAULT_DEBUGGER_HUB_URL,
   });
@@ -66,7 +64,7 @@ export default async function Home({ searchParams }: NextServerPageProps) {
   }
   console.log("frameMessage is:", frameMessage);
 
-  const [state, dispatch] = useFramesReducer<LFGState>(
+  const [state, dispatch] = useFramesReducer<AdsState>(
     reducer,
     initialState,
     previousFrame
@@ -91,31 +89,18 @@ export default async function Home({ searchParams }: NextServerPageProps) {
       </Link>
       <FrameContainer
         // postUrl="/lfg/frames"
-        postUrl="/"
-        pathname="/"
+        postUrl="/ads/frames"
+
+        pathname="/ads"
         state={state}
         previousFrame={previousFrame}
       >
         {/* <FrameImage src="https://framesjs.org/og.png" /> */}
         <FrameImage aspectRatio="1.91:1">
-          <div tw="w-full h-full bg-slate-700 text-white justify-center items-center flex flex-col text-left">
+          <div tw="w-full h-full bg-slate-700 text-white justify-center items-center flex flex-col">
             <div tw="flex flex-row">
-              <p
-              >
-                WUW Frames:
-              </p>
+              {frameMessage?.inputText ? frameMessage.inputText : "Explorer Feed"}
             </div>
-            <p
-            //  tw="flex flex-row"
-            >
-              Quest and Ads for Farcaster
-
-            </p>
-            <p
-            >
-              Keep building after: @WUW_WhateverFi
-            </p>
-           
             {frameMessage && (
               <div tw="flex flex-col">
                 <div tw="flex">
@@ -142,18 +127,13 @@ export default async function Home({ searchParams }: NextServerPageProps) {
           </div>
         </FrameImage>
         <FrameInput text="put some text here" />
-        <FrameButton action="post" target="/quest">
-          Quest
-        </FrameButton>
-        <FrameButton action="post" target="/feed">
-          Feed
-        </FrameButton>
-        <FrameButton action="post" target="/ads">
-          Ads
+        <FrameButton>
+          View whatever
         </FrameButton>
         <FrameButton action="link" target={`https://wuwfi.xyz`}>
-          Go WUW
+          WUW Fi External
         </FrameButton>
+
       </FrameContainer>
     </div>
   );
